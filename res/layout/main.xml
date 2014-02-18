@@ -12,27 +12,35 @@
         android:text="Location" />
 
     <Button
-        android:id="@+id/nobtn"
+        android:id="@+id/allbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/locbtn"
         android:onClick="allevents"
-        android:text="All Events" />
+        android:text="All" />
     
         <Button
         android:id="@+id/nearbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/nobtn"
+        android:layout_toRightOf="@+id/allbtn"
         android:onClick="nearevents"
-        android:text="Near Events" />
+        android:text="Near" />
+        
+        <Button
+        android:id="@+id/clearbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/nearbtn"
+        android:onClick="clearevents"
+        android:text="Clear" />
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/nearbtn" >
+        android:layout_below="@+id/clearbtn" >
     </ListView>
 
 </RelativeLayout>
