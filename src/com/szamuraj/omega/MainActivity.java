@@ -36,12 +36,7 @@ public class MainActivity extends ListActivity{
 			e.printStackTrace();
 		}
 		 setContentView(R.layout.main);
-		 ControllerEvent eventoperation = new ControllerEvent(this);
-		 eventoperation.open();
-		 
-		 List values = eventoperation.getAllEvents();
-		 ArrayAdapter adapter  = new ArrayAdapter(this, android.R.layout.simple_list_item_1, values);
-		 setListAdapter(adapter);
+		 allevents(getListView());
 			
 			myDbHelper.close();
 			
@@ -75,12 +70,12 @@ public class MainActivity extends ListActivity{
 		 adapter.clear();
 	}
 	public void allevents(View view) {
-		 ArrayAdapter adapter = (ArrayAdapter) getListAdapter();
+		 
 		 ControllerEvent eventoperation = new ControllerEvent(this);
+		 eventoperation.open();
+		 
 		 List values = eventoperation.getAllEvents();
-		 for (  int i = 0; i < values.size(); i++ ) {
-			 adapter.add(values.get(i));
-		 }
+		 ArrayAdapter adapter  = new ArrayAdapter(this, android.R.layout.simple_list_item_1, values);
 		 setListAdapter(adapter);
 	}
 
