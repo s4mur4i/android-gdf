@@ -26,8 +26,8 @@ public class ControllerEventArtist {
 		dbhelper.close();
 	}
 	
-	public List getEventByArtist( int id) {
-		List eventartists= new ArrayList();
+	public List<ModelEventArtist> getEventByArtist( int id) {
+		List<ModelEventArtist> eventartists= new ArrayList<ModelEventArtist>();
 
 		Cursor cursor = database.query("EventArtist",EVENTARTIST_TABLE_COLUMNS,"event_id=" + id,null,null,null,null);
 
@@ -42,8 +42,8 @@ public class ControllerEventArtist {
 		return eventartists;
 	}
 	
-	public List getEventArtistByEvent (int id ) {
-		List eventartists= new ArrayList();
+	public List<ModelEventArtist> getEventArtistByEvent (int id ) {
+		List<ModelEventArtist> eventartists= new ArrayList<ModelEventArtist>();
 
 		Cursor cursor = database.query("EventArtist",EVENTARTIST_TABLE_COLUMNS,"artist_id=" + id,null,null,null,null);
 

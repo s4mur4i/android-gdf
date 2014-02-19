@@ -26,8 +26,8 @@ public class ControllerArtist {
 		dbhelper.close();
 	}
 	
-	public List getAllArtist() {
-		List artists= new ArrayList();
+	public List<ModelArtist> getAllArtist() {
+		List<ModelArtist> artists= new ArrayList<ModelArtist>();
 
 		Cursor cursor = database.query("Artist",ARTIST_TABLE_COLUMNS,null,null,null,null,null);
 

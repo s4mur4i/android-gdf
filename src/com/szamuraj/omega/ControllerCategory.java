@@ -26,8 +26,8 @@ public class ControllerCategory {
 		dbhelper.close();
 	}
 	
-	public List getAllCategory() {
-		List categories= new ArrayList();
+	public List<ModelCategory> getAllCategory() {
+		List<ModelCategory> categories= new ArrayList<ModelCategory>();
 
 		Cursor cursor = database.query("Category",CATEGORY_TABLE_COLUMNS,null,null,null,null,null);
 

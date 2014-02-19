@@ -21,6 +21,7 @@
         android:layout_above="@android:id/list"
         android:layout_alignRight="@+id/nearbtn"
         android:layout_below="@+id/allbtn"
+        android:layout_toRightOf="@+id/locbtn"
         android:background="@android:drawable/btn_dropdown"
         android:spinnerMode="dropdown" />
 
@@ -68,9 +69,20 @@
             android:layout_alignBottom="@+id/nearbtn"
             android:layout_alignLeft="@+id/reqdist"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
             android:gravity="bottom"
             android:text="Distance(K)"
             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/sum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/type"
+            android:layout_alignParentLeft="true"
+            android:layout_alignRight="@+id/locbtn"
+            android:layout_below="@+id/locbtn"
+            android:gravity="center"
+            android:text="TextView"
+            android:textSize="16sp" />
 
 </RelativeLayout>

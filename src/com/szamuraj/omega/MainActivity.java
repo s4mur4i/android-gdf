@@ -9,16 +9,14 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends ListActivity{
@@ -31,14 +29,12 @@ public class MainActivity extends ListActivity{
 	EditText mEdit;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		DatabaseHelper myDbHelper = new DatabaseHelper(getBaseContext());
 		myDbHelper = new DatabaseHelper(this);
 		try {
 			myDbHelper.createDataBase();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		setContentView(R.layout.main);
@@ -72,33 +68,20 @@ public class MainActivity extends ListActivity{
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
-				// TODO Auto-generated method stub
 				Toast.makeText(MainActivity.this,"Selected: " + parent.getItemAtPosition(position) , Toast.LENGTH_LONG).show();
 				allevents(view);
+				changeSum();
 			}
 
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {
-				// TODO Auto-generated method stub
-
 			}
 		});
-		//listView.setOnItemClickListener( new OnItemClickListener() {
-
-		//@Override
-		//	public void onItemClick(AdapterView<?> parent, View view,
-		//		int position, long id) {
-		// TODO Auto-generated method stub
-		//ModelEvent event = (ModelEvent) parent.getAdapter().getItem(position);
-		//}
-
-		//});
 
 	}
 
 	@Override
 	protected void onStart() {
-		// TODO Auto-generated method stub
 		super.onStart();
 
 	}
@@ -106,7 +89,7 @@ public class MainActivity extends ListActivity{
 
 	public void near(View view) {
 		Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		ArrayAdapter adapter = (ArrayAdapter) getListAdapter();
+		ArrayAdapter<?> adapter = (ArrayAdapter<?>) getListAdapter();
 		adapter.clear();
 		Spinner spinner = (Spinner) findViewById(R.id.type);
 		int pos;
@@ -125,7 +108,6 @@ public class MainActivity extends ListActivity{
 			try {
 				pstr = mEdit.getText().toString();
 			} catch (Exception e) {
-				// TODO: handle exception
 				pstr = "10";
 			}
 			if ( pstr.isEmpty()) {
@@ -135,7 +117,7 @@ public class MainActivity extends ListActivity{
 			Float f = Float.parseFloat(pstr);
 			placeoperation.setDistance(f);
 			
-			List values = placeoperation.getPlacesNearMe(location.getLatitude(), location.getLongitude());
+			List<?> values = placeoperation.getPlacesNearMe(location.getLatitude(), location.getLongitude());
 			ArrayAdapter nearplaceadapter  = new ArrayAdapter(this, android.R.layout.simple_list_item_1, values);
 			setListAdapter(nearplaceadapter);
 			break;
@@ -147,7 +129,6 @@ public class MainActivity extends ListActivity{
 			try {
 			str = mEdit.getText().toString();
 			} catch (Exception e) {
-				// TODO: handle exception
 				str = "10";
 			}
 			if ( str.isEmpty()) {
@@ -157,15 +138,16 @@ public class MainActivity extends ListActivity{
 			Float fl = Float.parseFloat(str);
 			eventoperation.setDistance(fl);
 			
-			List eventvalues = eventoperation.getEventsNearMe(location.getLatitude(), location.getLongitude());
+			List<?> eventvalues = eventoperation.getEventsNearMe(location.getLatitude(), location.getLongitude());
 			ArrayAdapter neareventadapter  = new ArrayAdapter(this, android.R.layout.simple_list_item_1, eventvalues);
 			setListAdapter(neareventadapter);
 			break;
 		}
+		changeSum();
 	}
 
 	public void clearevents(View view) {
-		ArrayAdapter adapter = (ArrayAdapter) getListAdapter();
+		ArrayAdapter<?> adapter = (ArrayAdapter<?>) getListAdapter();
 		adapter.clear();
 	}
 
@@ -182,7 +164,7 @@ public class MainActivity extends ListActivity{
 			ControllerEvent eventoperation = new ControllerEvent(this);
 			eventoperation.open();
 
-			List values = eventoperation.getAllEvents();
+			List<?> values = eventoperation.getAllEvents();
 			ArrayAdapter adapter  = new ArrayAdapter(this, android.R.layout.simple_list_item_1, values);
 			setListAdapter(adapter);
 			break;
@@ -190,28 +172,33 @@ public class MainActivity extends ListActivity{
 			ControllerArtist artist = new ControllerArtist(this);
 			artist.open();
 
-			List artistvalues = artist.getAllArtist();
+			List<?> artistvalues = artist.getAllArtist();
 			ArrayAdapter artistadapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, artistvalues);
 			setListAdapter(artistadapter);
 			break;
 		case 2:
 			ControllerPlace place = new ControllerPlace(this);
 			place.open();
-			List placevalues = place.getAllPlaces();
+			List<?> placevalues = place.getAllPlaces();
 			ArrayAdapter placeadapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, placevalues);
 			setListAdapter(placeadapter);
 			break;
 		case 3:
 			ControllerCategory category = new ControllerCategory(this);
 			category.open();
-			List categoryvalues = category.getAllCategory();
+			List<?> categoryvalues = category.getAllCategory();
 			ArrayAdapter categoryadapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, categoryvalues);
 			setListAdapter(categoryadapter);
 			break;
 		}
+		changeSum();
 	}
 
-
+	protected void changeSum() {
+		TextView mTextView = (TextView) findViewById(R.id.sum);
+		ArrayAdapter<?> adapter = (ArrayAdapter<?>) getListAdapter();
+		mTextView.setText( "Sum: " + adapter.getCount());
+	}
 
 	protected void showCurrentLocation() {
 

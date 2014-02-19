@@ -9,11 +9,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.location.Location;
-import android.location.LocationManager;
-import android.text.Editable;
-import android.util.Log;
-import android.widget.EditText;
-import android.widget.Toast;
 
 public class ControllerEvent {
 	String LOG="OMEGA";
@@ -41,8 +36,8 @@ public class ControllerEvent {
 		dbhelper.close();
 	}
 
-	public List getAllEvents() {
-		List events = new ArrayList();
+	public List<ModelEvent> getAllEvents() {
+		List<ModelEvent> events = new ArrayList<ModelEvent>();
 
 		Cursor cursor = database.query("Event",EVENT_TABLE_COLUMNS,null,null,null,null,null);
 
@@ -58,9 +53,9 @@ public class ControllerEvent {
 
 	}
 
-	public List getEventsNearMe(double lat, double lon) {
+	public List<ModelEvent> getEventsNearMe(double lat, double lon) {
 		GeoLocation myLocation = GeoLocation.fromDegrees(lat, lon);
-		List events= new ArrayList();
+		List<ModelEvent> events= new ArrayList<ModelEvent>();
 		SQLiteQueryBuilder _QB = new SQLiteQueryBuilder();
 		_QB.setTables("Event INNER JOIN Place ON Event.place_id = Place.id");
 		Cursor cursor = _QB.query(dbhelper.getReadableDatabase(),
