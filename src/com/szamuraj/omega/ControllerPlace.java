@@ -7,16 +7,17 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.location.Location;
 import android.location.LocationManager;
 
 public class ControllerPlace {
 	String LOG="OMEGA";
 	private DatabaseHelper dbhelper;
-	private String[] PLACE_TABLE_COLUMNS = { "id","name", "url", "lat", "lon", "addr", "email", "tel" };
+	private String[] PLACE_TABLE_COLUMNS = { "id","name", "url", "lat", "lon", "addrr", "email", "tel" };
 	private SQLiteDatabase database;
 	protected LocationManager locationManager;
-
+	float distance = 10;
 	public ControllerPlace(Context context) {
 		dbhelper = new DatabaseHelper(context);
 	}
@@ -45,34 +46,42 @@ public class ControllerPlace {
 		return places;
 	}
 	
-	public List getPlacesNearMe() {
-		Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		GeoLocation myLocation = GeoLocation.fromDegrees(location.getLatitude(), location.getLongitude());
-		double earthRadius = 6371.01;
-		double distance = 1000;
+	public List getPlacesNearMe(double lat, double lon) {
+		GeoLocation myLocation = GeoLocation.fromDegrees(lat, lon);
 		List places= new ArrayList();
-		GeoLocation[] boundingCoordinates =	myLocation.boundingCoordinates(distance, earthRadius);
-		boolean meridian180WithinDistance = boundingCoordinates[0].getLongitudeInRadians() > boundingCoordinates[1].getLongitudeInRadians();
-		
-		Cursor cursor = database.query("Place",PLACE_TABLE_COLUMNS, "(lat >= " + boundingCoordinates[0].getLatitudeInRadians() + 
-				" AND lat <= " +  boundingCoordinates[1].getLatitudeInRadians() + 
-				" ) AND (lon >= ? " + (meridian180WithinDistance ? "OR" : "AND") +
-				" lon <= " + boundingCoordinates[1].getLongitudeInRadians() + 
-				" ) AND " + "acos(sin(" + myLocation.getLatitudeInRadians() + 
-				" ) * sin(lat) + cos( " + myLocation.getLatitudeInRadians() + 
-				" ) * cos(lat) * cos(lon -" + myLocation.getLongitudeInRadians() + 
-				")) <= " + distance / earthRadius,null,null,null,null);
+		SQLiteQueryBuilder _QB = new SQLiteQueryBuilder();
+		_QB.setTables("Place");
+		Cursor cursor = _QB.query(dbhelper.getReadableDatabase(),PLACE_TABLE_COLUMNS, null, null, null, null,null);
+
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			ModelPlace place= parsePlace(cursor);
-			places.add(place);
+			Location pos_me = new Location("pont A");
+			pos_me.setLatitude(myLocation.getLatitudeInDegrees());
+			pos_me.setLongitude(myLocation.getLongitudeInDegrees());
+			Location pos_event = new Location("point B");
+			pos_event.setLatitude(cursor.getDouble(3));
+			pos_event.setLongitude(cursor.getDouble(4));
+			float dist = pos_me.distanceTo(pos_event)/1000;
+			
+			if ( dist<= distance) {
+				ModelPlace place= parsePlace(cursor);
+				places.add(place);
+			}
 			cursor.moveToNext();
 		}
-
 		cursor.close();
 		return places;
+		
 	}
 	
+	public float getDistance() {
+		return distance;
+	}
+
+	public void setDistance(float distance) {
+		this.distance = distance;
+	}
+
 	public ModelPlace getPlaceByID (int id ) {
 		ModelPlace place = new ModelPlace();
 

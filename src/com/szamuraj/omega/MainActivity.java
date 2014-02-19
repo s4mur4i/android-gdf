@@ -118,6 +118,26 @@ public class MainActivity extends ListActivity{
 
 		switch (pos) {
 		case 2:
+			ControllerPlace placeoperation = new ControllerPlace(this);
+			placeoperation.open();
+			String pstr;
+			mEdit = (EditText) findViewById(R.id.reqdist);
+			try {
+				pstr = mEdit.getText().toString();
+			} catch (Exception e) {
+				// TODO: handle exception
+				pstr = "10";
+			}
+			if ( pstr.isEmpty()) {
+				pstr = "10";
+			}
+
+			Float f = Float.parseFloat(pstr);
+			placeoperation.setDistance(f);
+			
+			List values = placeoperation.getPlacesNearMe(location.getLatitude(), location.getLongitude());
+			ArrayAdapter nearplaceadapter  = new ArrayAdapter(this, android.R.layout.simple_list_item_1, values);
+			setListAdapter(nearplaceadapter);
 			break;
 		default:
 			ControllerEvent eventoperation = new ControllerEvent(this);
@@ -134,11 +154,11 @@ public class MainActivity extends ListActivity{
 				str = "10";
 			}
 
-			Float f = Float.parseFloat(str);
-			eventoperation.setDistance(f);
+			Float fl = Float.parseFloat(str);
+			eventoperation.setDistance(fl);
 			
-			List values = eventoperation.getEventsNearMe(location.getLatitude(), location.getLongitude());
-			ArrayAdapter neareventadapter  = new ArrayAdapter(this, android.R.layout.simple_list_item_1, values);
+			List eventvalues = eventoperation.getEventsNearMe(location.getLatitude(), location.getLongitude());
+			ArrayAdapter neareventadapter  = new ArrayAdapter(this, android.R.layout.simple_list_item_1, eventvalues);
 			setListAdapter(neareventadapter);
 			break;
 		}

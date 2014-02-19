@@ -21,7 +21,6 @@ public class ControllerEvent {
 	private String[] EVENT_TABLE_COLUMNS = { "id","name", "place_id", "pic", "url", "date", "category_id", "besorolas" };
 	private SQLiteDatabase database;
 	float distance = 10;
-	EditText mEdit;
 	public ControllerEvent(Context context) {
 		dbhelper = new DatabaseHelper(context);
 	}
@@ -61,30 +60,21 @@ public class ControllerEvent {
 
 	public List getEventsNearMe(double lat, double lon) {
 		GeoLocation myLocation = GeoLocation.fromDegrees(lat, lon);
-		//double earthRadius = 6371.01;
 		List events= new ArrayList();
-		//GeoLocation[] boundingCoordinates =	myLocation.boundingCoordinates(distance, earthRadius);
-		//boolean meridian180WithinDistance = boundingCoordinates[0].getLongitudeInRadians() > boundingCoordinates[1].getLongitudeInRadians();
 		SQLiteQueryBuilder _QB = new SQLiteQueryBuilder();
 		_QB.setTables("Event INNER JOIN Place ON Event.place_id = Place.id");
-		//Log.v(LOG, "Min: " + boundingCoordinates[0].getLatitudeInDegrees() + " Max: " + boundingCoordinates[1].getLatitudeInDegrees());
 		Cursor cursor = _QB.query(dbhelper.getReadableDatabase(),
 				new String[]{"Event.id","Event.name", "Event.place_id", "Event.pic", "Event.url", "Event.date", "Event.category_id", "Event.besorolas", "Place.lat","Place.lon"}, 
 				null, null, null, null,null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			//	double dist = myLocation.distance(, , , );
 			Location pos_me = new Location("pont A");
-
 			pos_me.setLatitude(myLocation.getLatitudeInDegrees());
 			pos_me.setLongitude(myLocation.getLongitudeInDegrees());
-
 			Location pos_event = new Location("point B");
-
 			pos_event.setLatitude(cursor.getDouble(8));
 			pos_event.setLongitude(cursor.getDouble(9));
-
 			float dist = pos_me.distanceTo(pos_event)/1000;
 			
 			if ( dist<= distance) {
@@ -93,14 +83,12 @@ public class ControllerEvent {
 			}
 			cursor.moveToNext();
 		}
-
 		cursor.close();
 		return events;
 	}
 
 	public ModelEvent getEventByID(int id) {
 		ModelEvent event = new ModelEvent();
-
 		Cursor cursor = database.query(false, "Event",EVENT_TABLE_COLUMNS,"id=" + id, null, null, null, null, null);
 		event = parseEvent(cursor);
 		cursor.close();
