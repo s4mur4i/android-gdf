@@ -1,5 +1,7 @@
 package com.szamuraj.omega;
 
+import android.R.string;
+
 /**
  * <p>Represents a point on the surface of a sphere. (The Earth is almost
  * spherical.)</p>
@@ -175,5 +177,4 @@ public class GeoLocation {
 		return new GeoLocation[]{fromRadians(minLat, minLon),
 				fromRadians(maxLat, maxLon)};
 	}
-
 }

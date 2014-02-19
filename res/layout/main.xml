@@ -2,14 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="top"
+    android:gravity="top"
     android:orientation="vertical" >
-
-    <Button
-        android:id="@+id/locbtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="mylocation"
-        android:text="Location" />
 
     <Button
         android:id="@+id/allbtn"
@@ -18,29 +13,64 @@
         android:layout_toRightOf="@+id/locbtn"
         android:onClick="allevents"
         android:text="All" />
-    
-        <Button
+
+    <Spinner
+        android:id="@+id/type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@android:id/list"
+        android:layout_alignRight="@+id/nearbtn"
+        android:layout_below="@+id/allbtn"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown" />
+
+    <Button
         android:id="@+id/nearbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/allbtn"
-        android:onClick="nearevents"
+        android:onClick="near"
         android:text="Near" />
-        
-        <Button
-        android:id="@+id/clearbtn"
+
+    <Button
+        android:id="@+id/locbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/nearbtn"
-        android:onClick="clearevents"
-        android:text="Clear" />
-
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/clearbtn" >
+        android:layout_alignParentTop="true"
+        android:onClick="mylocation"
+        android:text="Location" />
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/reqdist" >
+
     </ListView>
+
+        <EditText
+            android:id="@+id/reqdist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/allbtn"
+            android:layout_toRightOf="@+id/nearbtn"
+            android:ems="10"
+            android:inputType="numberDecimal" />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/nearbtn"
+            android:layout_alignLeft="@+id/reqdist"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:gravity="bottom"
+            android:text="Distance(K)"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

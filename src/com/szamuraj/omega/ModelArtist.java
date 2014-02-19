@@ -31,5 +31,8 @@ public class ModelArtist {
 		this.url = url;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return name;
+	}
 }

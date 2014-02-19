@@ -76,6 +76,9 @@ public class ModelPlace {
 		return tel;
 	}
 
-
+	@Override
+	public String toString() {
+		return name;
+	}
 	 
 }
