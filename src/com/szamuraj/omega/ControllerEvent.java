@@ -9,6 +9,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.location.Location;
+import android.util.Log;
 
 public class ControllerEvent {
 	String LOG="OMEGA";
@@ -36,21 +37,17 @@ public class ControllerEvent {
 		dbhelper.close();
 	}
 
-	public List<ModelEvent> getAllEvents() {
-		List<ModelEvent> events = new ArrayList<ModelEvent>();
-
+	public List getAllEvents() {
+		List events = new ArrayList();
 		Cursor cursor = database.query("Event",EVENT_TABLE_COLUMNS,null,null,null,null,null);
-
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			ModelEvent event= parseEvent(cursor);
 			events.add(event);
 			cursor.moveToNext();
 		}
-
 		cursor.close();
 		return events;
-
 	}
 
 	public List<ModelEvent> getEventsNearMe(double lat, double lon) {
@@ -61,7 +58,6 @@ public class ControllerEvent {
 		Cursor cursor = _QB.query(dbhelper.getReadableDatabase(),
 				new String[]{"Event.id","Event.name", "Event.place_id", "Event.pic", "Event.url", "Event.date", "Event.category_id", "Event.besorolas", "Place.lat","Place.lon"}, 
 				null, null, null, null,null);
-
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
 			Location pos_me = new Location("pont A");
@@ -71,7 +67,6 @@ public class ControllerEvent {
 			pos_event.setLatitude(cursor.getDouble(8));
 			pos_event.setLongitude(cursor.getDouble(9));
 			float dist = pos_me.distanceTo(pos_event)/1000;
-			
 			if ( dist<= distance) {
 				ModelEvent event= parseEvent(cursor);
 				events.add(event);
@@ -81,10 +76,32 @@ public class ControllerEvent {
 		cursor.close();
 		return events;
 	}
+	
+	public float EventDist(int id, double lat, double lon) {
+		float dist;
+		GeoLocation myLocation = GeoLocation.fromDegrees(lat, lon);
+		SQLiteQueryBuilder _QB = new SQLiteQueryBuilder();
+		_QB.setTables("Event INNER JOIN Place ON Event.place_id = Place.id");
+		Cursor cursor = _QB.query(dbhelper.getReadableDatabase(),
+				new String[]{"Place.lat","Place.lon"}, 
+				"Event.id=" + id, null, null, null,null);
+		cursor.moveToFirst();
+		Location pos_me = new Location("pont A");
+		pos_me.setLatitude(myLocation.getLatitudeInDegrees());
+		pos_me.setLongitude(myLocation.getLongitudeInDegrees());
+		Location pos_event = new Location("point B");
+		pos_event.setLatitude(cursor.getDouble(0));
+		pos_event.setLongitude(cursor.getDouble(1));
+		dist = pos_me.distanceTo(pos_event)/1000;
+		cursor.close();
+		return dist;
+	}
 
 	public ModelEvent getEventByID(int id) {
 		ModelEvent event = new ModelEvent();
-		Cursor cursor = database.query(false, "Event",EVENT_TABLE_COLUMNS,"id=" + id, null, null, null, null, null);
+		Log.v(LOG, "id:" + id);
+		Cursor cursor = database.query( "Event",EVENT_TABLE_COLUMNS,"id= " + id,null,null,null,null );
+		cursor.moveToFirst();
 		event = parseEvent(cursor);
 		cursor.close();
 		return event;
@@ -103,10 +120,3 @@ public class ControllerEvent {
 		return event;
 	}
 }
-//"(Place.lat >= " + boundingCoordinates[0].getLatitudeInDegrees() +
-//" AND Place.lat <= " +  boundingCoordinates[1].getLatitudeInDegrees() +
-//" ) AND (Place.lon >= " + boundingCoordinates[0].getLongitudeInDegrees() +
-//(meridian180WithinDistance ? " OR " : " AND ") +
-//" Place.lon <= " + boundingCoordinates[1].getLongitudeInDegrees() + " ) AND " + 
-//"acos(sin(" + myLocation.getLatitudeInDegrees() + ") * sin(Place.lat) + cos("+ myLocation.getLatitudeInDegrees()+
-//") * cos(Place.lat) * cos( Place.lon - " + myLocation.getLongitudeInDegrees() + ")) <= " + distance / earthRadius

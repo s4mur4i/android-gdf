@@ -5,16 +5,20 @@ import java.util.List;
 
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +26,7 @@ import android.widget.Toast;
 public class MainActivity extends ListActivity{
 	private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
 	private static final long MINIMUM_TIME_BETWEEN_UPDATES = 1000; // in Milliseconds
+	public final static String EXTRA_MESSAGE = "com.szamuraj.omega.MESSAGE";
 
 	protected LocationManager locationManager;
 
@@ -77,6 +82,38 @@ public class MainActivity extends ListActivity{
 			public void onNothingSelected(AdapterView<?> parent) {
 			}
 		});
+		ListView listview = getListView();
+		listview.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long id) {
+				// TODO Auto-generated method stub
+				Object item = parent.getItemAtPosition(position);
+				if (item instanceof ModelEvent) {
+					Intent EventActivity = new Intent(MainActivity.this,EventActivity.class);
+					Integer eventid = ((ModelEvent) item).getId();
+					EventActivity.putExtra(EXTRA_MESSAGE, eventid);
+					startActivity(EventActivity);
+				} else if (item instanceof ModelPlace) {
+					Intent PlaceActivity = new Intent(MainActivity.this,PlaceActivity.class);
+					Integer placeid = ((ModelPlace) item).getId();
+					PlaceActivity.putExtra(EXTRA_MESSAGE, placeid);
+					startActivity(PlaceActivity);
+				} else if (item instanceof ModelArtist) {
+					Intent ArtistActivity = new Intent(MainActivity.this,ArtistActivity.class);
+					Integer artistid = ((ModelArtist) item).getId();
+					ArtistActivity.putExtra(EXTRA_MESSAGE, artistid);
+					startActivity(ArtistActivity);
+				} else if ( item instanceof ModelCategory) {
+					Intent CategoryActivity = new Intent(MainActivity.this,CategoryActivity.class);
+					Integer categoryid = ((ModelCategory) item).getId();
+					CategoryActivity.putExtra(EXTRA_MESSAGE, categoryid);
+					startActivity(CategoryActivity);
+				}
+
+			}
+		});
 
 	}
 
@@ -116,8 +153,8 @@ public class MainActivity extends ListActivity{
 
 			Float f = Float.parseFloat(pstr);
 			placeoperation.setDistance(f);
-			
-			List<?> values = placeoperation.getPlacesNearMe(location.getLatitude(), location.getLongitude());
+
+			List values = placeoperation.getPlacesNearMe(location.getLatitude(), location.getLongitude());
 			ArrayAdapter nearplaceadapter  = new ArrayAdapter(this, android.R.layout.simple_list_item_1, values);
 			setListAdapter(nearplaceadapter);
 			break;
@@ -127,7 +164,7 @@ public class MainActivity extends ListActivity{
 			String str;
 			mEdit = (EditText) findViewById(R.id.reqdist);
 			try {
-			str = mEdit.getText().toString();
+				str = mEdit.getText().toString();
 			} catch (Exception e) {
 				str = "10";
 			}
@@ -137,7 +174,7 @@ public class MainActivity extends ListActivity{
 
 			Float fl = Float.parseFloat(str);
 			eventoperation.setDistance(fl);
-			
+
 			List<?> eventvalues = eventoperation.getEventsNearMe(location.getLatitude(), location.getLongitude());
 			ArrayAdapter neareventadapter  = new ArrayAdapter(this, android.R.layout.simple_list_item_1, eventvalues);
 			setListAdapter(neareventadapter);
@@ -147,7 +184,7 @@ public class MainActivity extends ListActivity{
 	}
 
 	public void clearevents(View view) {
-		ArrayAdapter<?> adapter = (ArrayAdapter<?>) getListAdapter();
+		ArrayAdapter adapter = (ArrayAdapter) getListAdapter();
 		adapter.clear();
 	}
 
@@ -164,7 +201,7 @@ public class MainActivity extends ListActivity{
 			ControllerEvent eventoperation = new ControllerEvent(this);
 			eventoperation.open();
 
-			List<?> values = eventoperation.getAllEvents();
+			List values = eventoperation.getAllEvents();
 			ArrayAdapter adapter  = new ArrayAdapter(this, android.R.layout.simple_list_item_1, values);
 			setListAdapter(adapter);
 			break;
@@ -191,7 +228,7 @@ public class MainActivity extends ListActivity{
 			setListAdapter(categoryadapter);
 			break;
 		}
-		changeSum();
+		//changeSum();
 	}
 
 	protected void changeSum() {
