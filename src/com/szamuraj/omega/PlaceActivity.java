@@ -99,13 +99,28 @@ public class PlaceActivity extends Activity{
 		}
 	switch (pos) {
 	case 0:
-
+		//Event
+		ControllerEvent eventoperation = new ControllerEvent(this);
+		eventoperation.open();
+		List eventvalues = eventoperation.getPlace2Event(id);
+		ArrayAdapter eventadapter  = new ArrayAdapter(this, android.R.layout.simple_list_item_1, eventvalues);
+		listview.setAdapter(eventadapter);
 		break;
 	case 1:
-
+		//Artist
+		ControllerArtist artistoperation = new ControllerArtist(this);
+		artistoperation.open();
+		List artistvalues = artistoperation.getPlace2Artist(id);
+		ArrayAdapter artistadapter  = new ArrayAdapter(this, android.R.layout.simple_list_item_1, artistvalues);
+		listview.setAdapter(artistadapter);
 		break;
 	case 2:
-
+		//Category
+		ControllerCategory categoryoperation = new ControllerCategory(this);
+		categoryoperation.open();
+		List categoryvalues = categoryoperation.getPlace2Category(id);
+		ArrayAdapter categoryadapter  = new ArrayAdapter(this, android.R.layout.simple_list_item_1, categoryvalues);
+		listview.setAdapter(categoryadapter);
 		break;
 	}
 }

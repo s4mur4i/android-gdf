@@ -96,7 +96,55 @@ public class ControllerEvent {
 		cursor.close();
 		return dist;
 	}
-
+	
+	public List<ModelEvent> getArtist2Event(int id) {
+		List events = new ArrayList();
+		SQLiteQueryBuilder _QB = new SQLiteQueryBuilder();
+		_QB.setTables("Event INNER JOIN EventArtist ON Event.id = EventArtist.event_id LEFT JOIN Artist ON EventArtist.artist_id = Artist.id");
+		Cursor cursor = _QB.query(dbhelper.getReadableDatabase(),
+				new String[]{"Event.id","Event.name", "Event.place_id", "Event.pic", "Event.url", "Event.date", "Event.category_id", "Event.besorolas"}, 
+				"Artist.id = " + id, null, null, null,null);
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			ModelEvent event= parseEvent(cursor);
+			events.add(event);
+			cursor.moveToNext();
+		}
+		return events;
+	}
+	
+	public List<ModelEvent> getPlace2Event(int id) {
+		List events = new ArrayList();
+		SQLiteQueryBuilder _QB = new SQLiteQueryBuilder();
+		_QB.setTables("Event INNER JOIN Place ON Event.place_id = Place.id");
+		Cursor cursor = _QB.query(dbhelper.getReadableDatabase(),
+				new String[]{"Event.id","Event.name", "Event.place_id", "Event.pic", "Event.url", "Event.date", "Event.category_id", "Event.besorolas"}, 
+				"Place.id = " + id, null, null, null,null);
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			ModelEvent event= parseEvent(cursor);
+			events.add(event);
+			cursor.moveToNext();
+		}
+		return events;
+	}
+	
+	public List<ModelEvent> getCategory2Event(int id) {
+		List events = new ArrayList();
+		SQLiteQueryBuilder _QB = new SQLiteQueryBuilder();
+		_QB.setTables("Event INNER JOIN Category ON Event.category_id = Category.id");
+		Cursor cursor = _QB.query(dbhelper.getReadableDatabase(),
+				new String[]{"Event.id","Event.name", "Event.place_id", "Event.pic", "Event.url", "Event.date", "Event.category_id", "Event.besorolas"}, 
+				"Category.id = " + id, null, null, null,null);
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			ModelEvent event= parseEvent(cursor);
+			events.add(event);
+			cursor.moveToNext();
+		}
+		return events;
+	}
+	
 	public ModelEvent getEventByID(int id) {
 		ModelEvent event = new ModelEvent();
 		Log.v(LOG, "id:" + id);

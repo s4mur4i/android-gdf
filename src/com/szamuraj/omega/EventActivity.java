@@ -103,9 +103,9 @@ public class EventActivity extends Activity{
 	case 0:
 		ControllerArtist artistoperation = new ControllerArtist(this);
 		artistoperation.open();
-		List values = artistoperation.getEvent2Artist(id);
-		ArrayAdapter eventadapter  = new ArrayAdapter(this, android.R.layout.simple_list_item_1, values);
-		listview.setAdapter(eventadapter);
+		List artistvalues = artistoperation.getEvent2Artist(id);
+		ArrayAdapter artistadapter  = new ArrayAdapter(this, android.R.layout.simple_list_item_1, artistvalues);
+		listview.setAdapter(artistadapter);
 		break;
 	case 1:
 		//Place

@@ -20,13 +20,14 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class ArtistActivity extends Activity{
+	public final static String EXTRA_MESSAGE = "com.szamuraj.omega.MESSAGE";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.artistlayout);
-		Intent intent = getIntent();
+		final Intent intent = getIntent();
 		final int artistid = intent.getIntExtra(MainActivity.EXTRA_MESSAGE, 0);
 		updateLayout(artistid);
 		Spinner dropdown = (Spinner)findViewById(R.id.artistspinner);
@@ -50,15 +51,7 @@ public class ArtistActivity extends Activity{
 			}
 			
 		});
-		ListView eventlistview = (ListView) findViewById(R.id.artistlist);
-		eventlistview.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				// TODO Auto-generated method stub
-			}
-		});
+		
 	}
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -91,13 +84,28 @@ public class ArtistActivity extends Activity{
 		}
 	switch (pos) {
 	case 0:
-		
+		//Place
+		ControllerPlace placeoperation = new ControllerPlace(this);
+		placeoperation.open();
+		List placevalues = placeoperation.getArtist2Place(id);
+		ArrayAdapter placeadapter  = new ArrayAdapter(this, android.R.layout.simple_list_item_1, placevalues);
+		listview.setAdapter(placeadapter);
 		break;
 	case 1:
-		
+		//Event
+		ControllerEvent eventoperation = new ControllerEvent(this);
+		eventoperation.open();
+		List eventvalues = eventoperation.getArtist2Event(id);
+		ArrayAdapter eventadapter  = new ArrayAdapter(this, android.R.layout.simple_list_item_1, eventvalues);
+		listview.setAdapter(eventadapter);
 		break;
 	case 2:
-		
+		//Category
+		ControllerCategory categoryoperation = new ControllerCategory(this);
+		categoryoperation.open();
+		List categoryvalues = categoryoperation.getArtist2Category(id);
+		ArrayAdapter categoryadapter  = new ArrayAdapter(this, android.R.layout.simple_list_item_1, categoryvalues);
+		listview.setAdapter(categoryadapter);
 		break;
 	}
 }

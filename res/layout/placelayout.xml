@@ -15,15 +15,6 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
-        android:id="@+id/placedist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/placename"
-        android:layout_alignParentRight="true"
-        android:text="Dist"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
         android:id="@+id/placetel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -67,5 +58,14 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/placespinner" >
     </ListView>
+
+    <TextView
+        android:id="@+id/placedist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/placespinner"
+        android:layout_alignParentRight="true"
+        android:text="Dist"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

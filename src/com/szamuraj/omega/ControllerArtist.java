@@ -56,6 +56,39 @@ public class ControllerArtist {
 		}
 		return artists;
 	}
+	
+	public List<ModelArtist> getCategory2Artist(int id) {
+		List artists = new ArrayList();
+		SQLiteQueryBuilder _QB = new SQLiteQueryBuilder();
+		_QB.setTables("Artist INNER JOIN EventArtist ON Artist.id = EventArtist.artist_id LEFT JOIN Event on EventArtist.event_id = Event.id LEFT JOIN Category ON Event.category_id = Category.id");
+		Cursor cursor = _QB.query(dbhelper.getReadableDatabase(),
+				new String[]{"Artist.id", "Artist.name", "Artist.url"}, 
+				"Category.id = " + id, null, null, null,null);
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			ModelArtist artist= parseArtist(cursor);
+			artists.add(artist);
+			cursor.moveToNext();
+			Log.v("omega", "Artist: " + artist.getName());
+		}
+		return artists;
+	}
+	
+	public List<ModelArtist> getPlace2Artist(int id) {
+		List artists = new ArrayList();
+		SQLiteQueryBuilder _QB = new SQLiteQueryBuilder();
+		_QB.setTables("Artist INNER JOIN EventArtist ON Artist.id = EventArtist.artist_id LEFT JOIN Event on EventArtist.event_id = Event.id LEFT JOIN Place ON Event.place_id = Place.id");
+		Cursor cursor = _QB.query(dbhelper.getReadableDatabase(),
+				new String[]{"Artist.id", "Artist.name", "Artist.url"}, 
+				"Place.id = " + id, null, null, null,null);
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			ModelArtist artist= parseArtist(cursor);
+			artists.add(artist);
+			cursor.moveToNext();
+		}
+		return artists;
+	}
 
 	public ModelArtist getArtistByID (int id ) {
 		ModelArtist artist = new ModelArtist();

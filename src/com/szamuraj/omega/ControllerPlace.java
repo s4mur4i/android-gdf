@@ -103,7 +103,39 @@ public class ControllerPlace {
 		}
 		return places;
 	}
-
+	
+	public List<ModelPlace> getArtist2Place(int id) {
+		List places = new ArrayList();
+		SQLiteQueryBuilder _QB = new SQLiteQueryBuilder();
+		_QB.setTables("Event INNER JOIN Place ON Event.place_id=Place.id LEFT JOIN EventArtist on Event.id = EventArtist.event_id LEFT JOIN Artist ON EventArtist.artist_id = Artist.id");
+		Cursor cursor = _QB.query(dbhelper.getReadableDatabase(),
+				new String[]{"Place.id", "Place.name", "Place.url", "Place.lat", "Place.lon","Place.addrr", "Place.email","Place.tel"}, 
+				"Artist.id = " + id, null, null, null,null);
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			ModelPlace place= parsePlace(cursor);
+			places.add(place);
+			cursor.moveToNext();
+		}
+		return places;
+	}
+	
+	public List<ModelPlace> getCategory2Place(int id) {
+		List places = new ArrayList();
+		SQLiteQueryBuilder _QB = new SQLiteQueryBuilder();
+		_QB.setTables("Event INNER JOIN Place ON Event.place_id=Place.id LEFT JOIN Category on Event.category_id=Category.id");
+		Cursor cursor = _QB.query(dbhelper.getReadableDatabase(),
+				new String[]{"Place.id", "Place.name", "Place.url", "Place.lat", "Place.lon","Place.addrr", "Place.email","Place.tel"}, 
+				"Category.id = " + id, null, null, null,null);
+		cursor.moveToFirst();
+		while (!cursor.isAfterLast()) {
+			ModelPlace place= parsePlace(cursor);
+			places.add(place);
+			cursor.moveToNext();
+		}
+		return places;
+	}
+	
 	public float getDistance() {
 		return distance;
 	}
