@@ -31,7 +31,8 @@ public class EventActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.eventlayout);
 		Intent intent = getIntent();
-		final int eventid = intent.getIntExtra(MainActivity.EXTRA_MESSAGE, 0);
+		Bundle b = getIntent().getExtras();
+		final int eventid = b.getInt("id");
 		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		updateLayout(eventid);
 		Spinner dropdown = (Spinner)findViewById(R.id.eventmodeltype);
@@ -62,6 +63,37 @@ public class EventActivity extends Activity{
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
+				Object item = parent.getItemAtPosition(position);
+				if (item instanceof ModelEvent) {
+					Intent EventActivity = new Intent(EventActivity.this,EventActivity.class);
+					Bundle b= new Bundle();
+					b.putInt("id", ((ModelEvent) item).getId());
+					Log.v("Omega", "id: " +  ((ModelEvent) item).getId());
+					EventActivity.putExtras(b);
+					startActivity(EventActivity);
+					//finish();
+				} else if (item instanceof ModelPlace) {
+					Intent PlaceActivity = new Intent(EventActivity.this,PlaceActivity.class);
+					Bundle b= new Bundle();
+					b.putInt("id", ((ModelPlace) item).getId());
+					PlaceActivity.putExtras(b);
+					startActivity(PlaceActivity);
+					//finish();
+				} else if (item instanceof ModelArtist) {
+					Intent ArtistActivity = new Intent(EventActivity.this,ArtistActivity.class);
+					Bundle b= new Bundle();
+					b.putInt("id", ((ModelArtist) item).getId());
+					ArtistActivity.putExtras(b);
+					startActivity(ArtistActivity);
+					//finish();
+				} else if ( item instanceof ModelCategory) {
+					Intent CategoryActivity = new Intent(EventActivity.this,CategoryActivity.class);
+					Bundle b= new Bundle();
+					b.putInt("id", ((ModelCategory) item).getId());
+					CategoryActivity.putExtras(b);
+					startActivity(CategoryActivity);
+					//finish();
+				}
 			}
 		});
 	}

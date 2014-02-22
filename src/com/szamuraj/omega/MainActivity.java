@@ -92,26 +92,33 @@ public class MainActivity extends ListActivity{
 				Object item = parent.getItemAtPosition(position);
 				if (item instanceof ModelEvent) {
 					Intent EventActivity = new Intent(MainActivity.this,EventActivity.class);
-					Integer eventid = ((ModelEvent) item).getId();
-					EventActivity.putExtra(EXTRA_MESSAGE, eventid);
+					Bundle b= new Bundle();
+					b.putInt("id", ((ModelEvent) item).getId());
+					EventActivity.putExtras(b);
 					startActivity(EventActivity);
+					//finish();
 				} else if (item instanceof ModelPlace) {
 					Intent PlaceActivity = new Intent(MainActivity.this,PlaceActivity.class);
-					Integer placeid = ((ModelPlace) item).getId();
-					PlaceActivity.putExtra(EXTRA_MESSAGE, placeid);
+					Bundle b= new Bundle();
+					b.putInt("id", ((ModelPlace) item).getId());
+					PlaceActivity.putExtras(b);
 					startActivity(PlaceActivity);
+					//finish();
 				} else if (item instanceof ModelArtist) {
 					Intent ArtistActivity = new Intent(MainActivity.this,ArtistActivity.class);
-					Integer artistid = ((ModelArtist) item).getId();
-					ArtistActivity.putExtra(EXTRA_MESSAGE, artistid);
+					Bundle b= new Bundle();
+					b.putInt("id", ((ModelArtist) item).getId());
+					ArtistActivity.putExtras(b);
 					startActivity(ArtistActivity);
+					//finish();
 				} else if ( item instanceof ModelCategory) {
 					Intent CategoryActivity = new Intent(MainActivity.this,CategoryActivity.class);
-					Integer categoryid = ((ModelCategory) item).getId();
-					CategoryActivity.putExtra(EXTRA_MESSAGE, categoryid);
+					Bundle b= new Bundle();
+					b.putInt("id", ((ModelCategory) item).getId());
+					CategoryActivity.putExtras(b);
 					startActivity(CategoryActivity);
+					//finish();
 				}
-
 			}
 		});
 

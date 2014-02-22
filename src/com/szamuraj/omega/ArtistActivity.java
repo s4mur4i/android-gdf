@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,7 +29,8 @@ public class ArtistActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.artistlayout);
 		final Intent intent = getIntent();
-		final int artistid = intent.getIntExtra(MainActivity.EXTRA_MESSAGE, 0);
+		Bundle b = getIntent().getExtras();
+		final int artistid = b.getInt("id");
 		updateLayout(artistid);
 		Spinner dropdown = (Spinner)findViewById(R.id.artistspinner);
 		String[] items = new String[]{"Place","Event","Category"};
@@ -51,7 +53,46 @@ public class ArtistActivity extends Activity{
 			}
 			
 		});
-		
+		ListView listview = (ListView) findViewById(R.id.artistlist);
+		listview.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				Object item = parent.getItemAtPosition(position);
+				if (item instanceof ModelEvent) {
+					Intent EventActivity = new Intent(ArtistActivity.this,EventActivity.class);
+					Bundle b= new Bundle();
+					b.putInt("id", ((ModelEvent) item).getId());
+					Log.v("Omega", "id: " +  ((ModelEvent) item).getId());
+					EventActivity.putExtras(b);
+					startActivity(EventActivity);
+					//finish();
+				} else if (item instanceof ModelPlace) {
+					Intent PlaceActivity = new Intent(ArtistActivity.this,PlaceActivity.class);
+					Bundle b= new Bundle();
+					b.putInt("id", ((ModelPlace) item).getId());
+					PlaceActivity.putExtras(b);
+					startActivity(PlaceActivity);
+					//finish();
+				} else if (item instanceof ModelArtist) {
+					Intent ArtistActivity = new Intent(ArtistActivity.this,ArtistActivity.class);
+					Bundle b= new Bundle();
+					b.putInt("id", ((ModelArtist) item).getId());
+					ArtistActivity.putExtras(b);
+					startActivity(ArtistActivity);
+					//finish();
+				} else if ( item instanceof ModelCategory) {
+					Intent CategoryActivity = new Intent(ArtistActivity.this,CategoryActivity.class);
+					Bundle b= new Bundle();
+					b.putInt("id", ((ModelCategory) item).getId());
+					CategoryActivity.putExtras(b);
+					startActivity(CategoryActivity);
+					//finish();
+				}
+			}
+		});
 	}
 	@Override
     public boolean onOptionsItemSelected(MenuItem item) {

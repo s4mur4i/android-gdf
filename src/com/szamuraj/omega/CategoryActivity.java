@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,7 +25,8 @@ public class CategoryActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.categorylayout);
 		Intent intent = getIntent();
-		final int categoryid = intent.getIntExtra(MainActivity.EXTRA_MESSAGE, 0);
+		Bundle b = getIntent().getExtras();
+		final int categoryid = b.getInt("id");
 		updateLayout(categoryid);
 		Spinner dropdown = (Spinner)findViewById(R.id.categoryspinner);
 		String[] items = new String[]{"Place","Event","Artist"};
@@ -54,6 +56,37 @@ public class CategoryActivity extends Activity{
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				// TODO Auto-generated method stub
+				Object item = parent.getItemAtPosition(position);
+				if (item instanceof ModelEvent) {
+					Intent EventActivity = new Intent(CategoryActivity.this,EventActivity.class);
+					Bundle b= new Bundle();
+					b.putInt("id", ((ModelEvent) item).getId());
+					Log.v("Omega", "id: " +  ((ModelEvent) item).getId());
+					EventActivity.putExtras(b);
+					startActivity(EventActivity);
+					//finish();
+				} else if (item instanceof ModelPlace) {
+					Intent PlaceActivity = new Intent(CategoryActivity.this,PlaceActivity.class);
+					Bundle b= new Bundle();
+					b.putInt("id", ((ModelPlace) item).getId());
+					PlaceActivity.putExtras(b);
+					startActivity(PlaceActivity);
+					//finish();
+				} else if (item instanceof ModelArtist) {
+					Intent ArtistActivity = new Intent(CategoryActivity.this,ArtistActivity.class);
+					Bundle b= new Bundle();
+					b.putInt("id", ((ModelArtist) item).getId());
+					ArtistActivity.putExtras(b);
+					startActivity(ArtistActivity);
+					//finish();
+				} else if ( item instanceof ModelCategory) {
+					Intent CategoryActivity = new Intent(CategoryActivity.this,CategoryActivity.class);
+					Bundle b= new Bundle();
+					b.putInt("id", ((ModelCategory) item).getId());
+					CategoryActivity.putExtras(b);
+					startActivity(CategoryActivity);
+					//finish();
+				}
 			}
 		});
 	}
