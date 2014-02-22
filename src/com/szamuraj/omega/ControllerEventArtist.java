@@ -1,13 +1,10 @@
 package com.szamuraj.omega;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-
 public class ControllerEventArtist {
 	private DatabaseHelper dbhelper;
 	private String[] EVENTARTIST_TABLE_COLUMNS = { "event_id","artist_id" };
@@ -15,15 +12,12 @@ public class ControllerEventArtist {
 	public ControllerEventArtist(Context context) {
 		dbhelper = new DatabaseHelper(context);
 	}
-
 	public void open() throws SQLException {
 		database = dbhelper.getWritableDatabase();
 	}
-
 	public void close() {
 		dbhelper.close();
 	}
-
 	public List<ModelEventArtist> getEventByArtist( int id) {
 		List<ModelEventArtist> eventartists= new ArrayList<ModelEventArtist>();
 		Cursor cursor = database.query("EventArtist",EVENTARTIST_TABLE_COLUMNS,"event_id=" + id,null,null,null,null);
@@ -36,7 +30,6 @@ public class ControllerEventArtist {
 		cursor.close();
 		return eventartists;
 	}
-
 	public List<ModelEventArtist> getEventArtistByEvent (int id ) {
 		List<ModelEventArtist> eventartists= new ArrayList<ModelEventArtist>();
 		Cursor cursor = database.query("EventArtist",EVENTARTIST_TABLE_COLUMNS,"artist_id=" + id,null,null,null,null);
@@ -49,7 +42,6 @@ public class ControllerEventArtist {
 		cursor.close();
 		return eventartists;
 	}
-
 	public ModelEventArtist parseEventArtist (Cursor cursor) {
 		ModelEventArtist eventartist = new ModelEventArtist();
 		eventartist.setArtist_id(cursor.getInt(0));

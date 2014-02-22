@@ -1,16 +1,12 @@
 package com.szamuraj.omega;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.location.Location;
-import android.util.Log;
-
 public class ControllerEvent {
 	String LOG="OMEGA";
 	private DatabaseHelper dbhelper;
@@ -20,25 +16,20 @@ public class ControllerEvent {
 	public ControllerEvent(Context context) {
 		dbhelper = new DatabaseHelper(context);
 	}
-
 	public void open() throws SQLException {
 		database = dbhelper.getWritableDatabase();
 	}
-
 	public float getDistance() {
 		return distance;
 	}
-
 	public void setDistance(float distance) {
 		this.distance = distance;
 	}
-
 	public void close() {
 		dbhelper.close();
 	}
-
-	public List getAllEvents() {
-		List events = new ArrayList();
+	public List<ModelEvent> getAllEvents() {
+		List<ModelEvent> events = new ArrayList<ModelEvent>();
 		Cursor cursor = database.query("Event",EVENT_TABLE_COLUMNS,null,null,null,null,null);
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
@@ -49,7 +40,6 @@ public class ControllerEvent {
 		cursor.close();
 		return events;
 	}
-
 	public List<ModelEvent> getEventsNearMe(double lat, double lon) {
 		GeoLocation myLocation = GeoLocation.fromDegrees(lat, lon);
 		List<ModelEvent> events= new ArrayList<ModelEvent>();
@@ -76,7 +66,6 @@ public class ControllerEvent {
 		cursor.close();
 		return events;
 	}
-	
 	public float EventDist(int id, double lat, double lon) {
 		float dist;
 		GeoLocation myLocation = GeoLocation.fromDegrees(lat, lon);
@@ -96,9 +85,8 @@ public class ControllerEvent {
 		cursor.close();
 		return dist;
 	}
-	
 	public List<ModelEvent> getArtist2Event(int id) {
-		List events = new ArrayList();
+		List<ModelEvent> events = new ArrayList<ModelEvent>();
 		SQLiteQueryBuilder _QB = new SQLiteQueryBuilder();
 		_QB.setTables("Event INNER JOIN EventArtist ON Event.id = EventArtist.event_id LEFT JOIN Artist ON EventArtist.artist_id = Artist.id");
 		Cursor cursor = _QB.query(dbhelper.getReadableDatabase(),
@@ -112,9 +100,8 @@ public class ControllerEvent {
 		}
 		return events;
 	}
-	
 	public List<ModelEvent> getPlace2Event(int id) {
-		List events = new ArrayList();
+		List<ModelEvent> events = new ArrayList<ModelEvent>();
 		SQLiteQueryBuilder _QB = new SQLiteQueryBuilder();
 		_QB.setTables("Event INNER JOIN Place ON Event.place_id = Place.id");
 		Cursor cursor = _QB.query(dbhelper.getReadableDatabase(),
@@ -128,9 +115,8 @@ public class ControllerEvent {
 		}
 		return events;
 	}
-	
 	public List<ModelEvent> getCategory2Event(int id) {
-		List events = new ArrayList();
+		List<ModelEvent> events = new ArrayList<ModelEvent>();
 		SQLiteQueryBuilder _QB = new SQLiteQueryBuilder();
 		_QB.setTables("Event INNER JOIN Category ON Event.category_id = Category.id");
 		Cursor cursor = _QB.query(dbhelper.getReadableDatabase(),
@@ -144,17 +130,14 @@ public class ControllerEvent {
 		}
 		return events;
 	}
-	
 	public ModelEvent getEventByID(int id) {
 		ModelEvent event = new ModelEvent();
-		Log.v(LOG, "id:" + id);
 		Cursor cursor = database.query( "Event",EVENT_TABLE_COLUMNS,"id= " + id,null,null,null,null );
 		cursor.moveToFirst();
 		event = parseEvent(cursor);
 		cursor.close();
 		return event;
 	}
-
 	public ModelEvent parseEvent(Cursor cursor) {
 		ModelEvent event = new ModelEvent();
 		event.setId((cursor.getInt(0)));
